@@ -3,4 +3,6 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <drawable name="clr_normal">#18bb18</drawable>
+    <drawable name="clr_pressed">#077c07</drawable>
 </resources>

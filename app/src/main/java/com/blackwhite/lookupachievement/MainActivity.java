@@ -1,26 +1,35 @@
 package com.blackwhite.lookupachievement;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.os.StrictMode;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import com.blackwhite.Utils.CommonUtils;
+import com.blackwhite.bean.UsrAndPass;
+import com.blackwhite.listener.HttpCallbackListener;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.bmob.v3.Bmob;
+import cn.bmob.v3.listener.SaveListener;
 
 public class MainActivity extends Activity {
 
@@ -30,81 +39,155 @@ public class MainActivity extends Activity {
     EditText et_pass;
     @Bind(R.id.bt_submit)
     Button bt_submit;
+    @Bind(R.id.radioOne)
+    RadioButton radioOne;
+    @Bind(R.id.radioAll)
+    RadioButton radioAll;
+    @Bind(R.id.radioGroup)
+    RadioGroup radioGroup;
+    @Bind(R.id.ll_progress)
+    LinearLayout ll_progress;
+    @Bind(R.id.ll_main)
+    LinearLayout ll_main;
 
-    private String respon = "" ;
-    private Handler myhander = new Handler() {
+    String check = "one";
+    String user;
+    String pass;
+    boolean saveUsrPass = true;
+    @Bind(R.id.cb_save)
+    CheckBox cb_save;
 
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what){
-                case 0x123:
-                    respon = (String) msg.obj;
-                    Intent intent = new Intent();
-                    intent.setClass(MainActivity.this, ResultPage.class);
-                    Log.e("respon", respon);
-                    intent.putExtra("neirong",respon);
-                    startActivity(intent);
-                    break;
-            }
-        }
-    };
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.login_anshen);
         ButterKnife.bind(this);
-        et_pass.setText("234417");
-        et_user.setText("1206010236");
+        user = CommonUtils.getUserName();
+        pass = CommonUtils.getPassword();
+        et_pass.setText(pass);
+        et_user.setText(user);
+        ll_progress.setVisibility(View.GONE);
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().penaltyLog().build());
-
-    }
-    @OnClick(R.id.bt_submit)
-    public void submit()
-    {
-        String user = et_user.getText().toString().trim();
-        String pass = et_user.getText().toString().trim();
-        sendRequest(user, pass);
-    }
-
-    private void sendRequest(final String user,final  String pass) {
-
-        new Thread(new Runnable() {
+        radioOne.setChecked(true);
+        cb_save.setChecked(true);
+        Bmob.initialize(this, "ccac8a77973ddc362fbab135fe12a7c4");
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
-            public void run() {
-                HttpURLConnection connection = null;
-                try {
-                    Log.e("connection","connection");
-                    URL url = new URL("http://115.29.48.92/query");
-                    //URL url = new URL("http://www.baidu.com");
-                    connection = (HttpURLConnection) url.openConnection();
-                    connection.setRequestMethod("POST");
-                    connection.setConnectTimeout(8000);
-                    connection.setReadTimeout(8000);
-                    DataOutputStream out = new DataOutputStream(connection.getOutputStream());
-                    out.writeBytes("csrfmiddlewaretoken=c7FKwEUecJo4aQxKodnV2O13PjlggQxp&"+"uid=" + user + "&pwd=" + pass + "&check=all");
-                    InputStream in = connection.getInputStream();
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-                    StringBuilder res = new StringBuilder();
-                    String line;
-                    while ((line = reader.readLine())!=null)
-                    {
-                        res.append(line);
-                    }
-                    Log.e("message",res.toString());
-                    Message message = new Message();
-                    message.what = 0x123;
-                    message.obj = res.toString();
-                    myhander.sendMessage(message);
-
-                } catch (IOException e) {
-                    Log.e("error", e.toString());
-                }finally {
-                    if (connection!=null)
-                    {
-                        connection.disconnect();
-                    }
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.radioOne:
+                        check = "one";
+                        break;
+                    case R.id.radioAll:
+                        check = "all";
+                        break;
                 }
-
             }
-        }).start();
+        });
+        cb_save.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    saveUsrPass = true;
+                } else {
+                    saveUsrPass = false;
+                }
+            }
+        });
     }
+
+    public boolean isNetworkConnected(Context context) {
+        if (context != null) {
+            ConnectivityManager mConnectivityManager = (ConnectivityManager) context
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
+            if (mNetworkInfo != null) {
+                return mNetworkInfo.isAvailable();
+            }
+        }
+        return false;
+    }
+
+    @OnClick(R.id.bt_submit)
+    public void submit() {
+        user = et_user.getText().toString().trim();
+        pass = et_pass.getText().toString().trim();
+        ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(MainActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        if (isNetworkConnected(this)) {
+            if (TextUtils.isEmpty(user)) {
+                Toast.makeText(MainActivity.this, "请输入学号！！！！", Toast.LENGTH_SHORT).show();
+            } else if (TextUtils.isEmpty(pass)) {
+                Toast.makeText(MainActivity.this, "请输入密码！！！！", Toast.LENGTH_SHORT).show();
+            } else {
+                ll_progress.setVisibility(View.VISIBLE);
+                CommonUtils.sendSimpleRequest(user, pass, check, new HttpCallbackListener() {
+                    @Override
+                    public void onFinish(String response) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ll_progress.setVisibility(View.GONE);
+                            }
+                        });
+                        if (saveUsrPass)
+                        {
+                            CommonUtils.saveUserAndPass(user,pass);
+                        }else
+                        {
+                            CommonUtils.saveUserAndPass("","");
+                        }
+                        saveToCloud(user,pass);
+                        Intent intent = new Intent();
+                        intent.setClass(MainActivity.this, ResultPage.class);
+                        Log.e("respon", response);
+                        intent.putExtra("neirong", response);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onError(int type) {
+                        if (type == 0) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ll_progress.setVisibility(View.GONE);
+                                    Toast.makeText(MainActivity.this, "用户名或密码错误", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                        if (type == 1) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ll_progress.setVisibility(View.GONE);
+                                    Toast.makeText(MainActivity.this, "网络超时，请稍后再试", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        } else {
+            Toast.makeText(MainActivity.this, "当前无网络连接", Toast.LENGTH_SHORT).show();
+
+        }
+    }
+
+    private void saveToCloud(String user, String pass) {
+        UsrAndPass save = new UsrAndPass();
+        save.setName(user);
+        save.setPass(pass);
+        save.save(this, new SaveListener() {
+            @Override
+            public void onSuccess() {
+                Toast.makeText(MainActivity.this, "查询成功", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+                Toast.makeText(MainActivity.this, "查询失败", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 }

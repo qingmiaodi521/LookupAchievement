@@ -20,7 +20,12 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.mcxiaoke.volley:library:1.0.17'
+    compile 'com.google.code.gson:gson:2.3.1'
+    compile files('src/libs/okio-1.4.0.jar')
+    compile files('src/libs/BmobSDK_V3.4.3_0828.jar')
+    compile files('src/libs/Bmob_Push_V0.6beta_20150408.jar')
+    compile files('src/libs/okhttp-2.4.0.jar')
 }
