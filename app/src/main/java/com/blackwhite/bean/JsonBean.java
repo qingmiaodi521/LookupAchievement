@@ -33,7 +33,7 @@ public class JsonBean {
 
     public static class SubjectsEntity {
         /**
-         * score : 78
+         * score : 79
          * subject : 编译原理
          * grade : 3
          */
