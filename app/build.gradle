@@ -24,8 +24,24 @@ dependencies {
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.mcxiaoke.volley:library:1.0.17'
     compile 'com.google.code.gson:gson:2.3.1'
+    compile "com.android.support:support-v4:22.2.1"
+    compile "com.android.support:appcompat-v7:22.2.1"
+    compile 'com.android.support:recyclerview-v7:22.2.1'
+    compile 'com.android.support:cardview-v7:22.2.1'
+    compile 'com.android.support:design:22.2.1'
     compile files('src/libs/okio-1.4.0.jar')
     compile files('src/libs/BmobSDK_V3.4.3_0828.jar')
     compile files('src/libs/Bmob_Push_V0.6beta_20150408.jar')
     compile files('src/libs/okhttp-2.4.0.jar')
+
+
+    compile 'com.mikepenz:iconics:1.2.0@aar'
+    compile('com.mikepenz:aboutlibraries:5.0.6@aar') {
+        transitive = true
+    }
+    compile('com.mikepenz:materialdrawer:3.0.9@aar') {
+        transitive = true
+    }
+
+    compile 'com.facebook.rebound:rebound:0.3.6'
 }

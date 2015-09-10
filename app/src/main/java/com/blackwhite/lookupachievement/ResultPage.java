@@ -1,8 +1,9 @@
 package com.blackwhite.lookupachievement;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,8 +26,9 @@ import butterknife.ButterKnife;
 
 /**
  * Created by BlackWhite on 15/9/8.
+ * 处理返回值的页面，也就是具体成绩的页面
  */
-public class ResultPage extends Activity {
+public class ResultPage extends AppCompatActivity {
 
     @Bind(R.id.content)
     TextView tv_content;
@@ -36,11 +38,26 @@ public class ResultPage extends Activity {
     ListView lv_result;
 
     JsonBean jsonBean;
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.result_page);
         ButterKnife.bind(this);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ResultPage.this.onBackPressed();
+            }
+        });
+
+
         Intent intent = getIntent();
         content = intent.getStringExtra("neirong");
         content = CommonUtils.convert(content);
@@ -52,7 +69,7 @@ public class ResultPage extends Activity {
     }
 
     private void setListView(JsonBean jsonBean) {
-        tv_content.setText("你的绩点为：" + jsonBean.getCredit() + "");
+        tv_content.setText(jsonBean.getCredit() + "");
         ResultAdapter adapter = new ResultAdapter();
         lv_result.setAdapter(adapter);
         adapter.updateData(jsonBean.getSubjects());
@@ -63,12 +80,6 @@ public class ResultPage extends Activity {
         Type type = new TypeToken<JsonBean>() {
         }.getType();
         jsonBean = gson.fromJson(content, type);
-        List<JsonBean.SubjectsEntity> subjects = jsonBean.getSubjects();
-        for (JsonBean.SubjectsEntity sub : subjects) {
-            Log.e("grade", sub.getGrade());
-            Log.e("score", sub.getScore());
-            Log.e("subject", sub.getSubject());
-        }
     }
 
     @Override
@@ -113,37 +124,29 @@ public class ResultPage extends Activity {
             ViewHolder viewHolder;
             final JsonBean.SubjectsEntity fund = data.get(position);
             if (convertView == null) {
-                convertView = LayoutInflater.from(ResultPage.this).inflate(R.layout.list_result, parent, false);
+                convertView = LayoutInflater.from(ResultPage.this).inflate(R.layout.itme_detail, parent, false);
                 viewHolder = new ViewHolder(convertView);
                 convertView.setTag(viewHolder);
             }
             viewHolder = (ViewHolder) convertView.getTag();
             viewHolder.tv_sub.setText(fund.getSubject());
             viewHolder.tv_score.setText(fund.getScore());
-            viewHolder.tv_garde.setText(fund.getGrade());
+            viewHolder.tv_grade.setText(fund.getGrade());
             return convertView;
         }
 
-        /**
-         * This class contains all butterknife-injected Views & Layouts from layout file 'list_result.xml'
-         * for easy to all layout elements.
-         *
-         * @author ButterKnifeZelezny, plugin for Android Studio by Avast Developers (http://github.com/avast)
-         */
-         class ViewHolder {
+        class ViewHolder {
             @Bind(R.id.tv_sub)
             TextView tv_sub;
             @Bind(R.id.tv_score)
             TextView tv_score;
             @Bind(R.id.tv_grade)
-            TextView tv_garde;
+            TextView tv_grade;
 
             ViewHolder(View view) {
                 ButterKnife.bind(this, view);
             }
         }
+
     }
-
-
-
 }

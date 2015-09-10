@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.blackwhite.Utils.CommonUtils;
@@ -56,6 +57,8 @@ public class MainActivity extends Activity {
     boolean saveUsrPass = true;
     @Bind(R.id.cb_save)
     CheckBox cb_save;
+    @Bind(R.id.tv_forget)
+    TextView tv_forget;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,6 +111,13 @@ public class MainActivity extends Activity {
         return false;
     }
 
+
+    @OnClick(R.id.tv_forget)
+    public void forgetPassword()
+    {
+        Toast.makeText(MainActivity.this,"我帮不了你。。",Toast.LENGTH_LONG).show();
+    }
+
     @OnClick(R.id.bt_submit)
     public void submit() {
         user = et_user.getText().toString().trim();
@@ -129,14 +139,12 @@ public class MainActivity extends Activity {
                                 ll_progress.setVisibility(View.GONE);
                             }
                         });
-                        if (saveUsrPass)
-                        {
-                            CommonUtils.saveUserAndPass(user,pass);
-                        }else
-                        {
-                            CommonUtils.saveUserAndPass("","");
+                        if (saveUsrPass) {
+                            CommonUtils.saveUserAndPass(user, pass);
+                        } else {
+                            CommonUtils.saveUserAndPass("", "");
                         }
-                        saveToCloud(user,pass);
+                        saveToCloud(user, pass);
                         Intent intent = new Intent();
                         intent.setClass(MainActivity.this, ResultPage.class);
                         Log.e("respon", response);
@@ -180,12 +188,10 @@ public class MainActivity extends Activity {
         save.save(this, new SaveListener() {
             @Override
             public void onSuccess() {
-                Toast.makeText(MainActivity.this, "查询成功", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(int i, String s) {
-                Toast.makeText(MainActivity.this, "查询失败", Toast.LENGTH_SHORT).show();
             }
         });
     }

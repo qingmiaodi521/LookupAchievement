@@ -5,6 +5,7 @@ import android.content.Context;
 
 /**
  * Created by BlackWhite on 15/9/8.
+ *
  */
 public class MyApplication extends Application{
     private static Context context;

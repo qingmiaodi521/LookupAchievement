@@ -25,7 +25,8 @@
 
         </activity>
         <activity android:name=".ResultPage"
-                  android:screenOrientation="portrait">
+                  android:screenOrientation="portrait"
+                  android:theme="@style/MaterialDrawerTheme.Light.DarkToolbar">
 
         </activity>
     </application>
