@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.blackwhite.listener.HttpCallBackUpdateListener;
 import com.blackwhite.listener.HttpCallbackListener;
 import com.blackwhite.lookupachievement.MyApplication;
 
@@ -19,21 +20,27 @@ import java.net.URL;
 public class CommonUtils {
 
 
-    public static void sendSimpleRequest(final String user, final String pass, final String check, final HttpCallbackListener listener) {
+    public static void sendSimpleRequest(final String user, final String pass, final HttpCallbackListener listener) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 HttpURLConnection connection = null;
+                HttpURLConnection connection1 = null;
                 try {
                     Log.e("connection", "connection");
-                    String add = "http://115.29.48.92/qilin/getgrade/qilin/";
-                    add = add + user + "/" + pass + "/" + check;
+                    String baseUrl = "http://115.29.48.92/qilin/getgrade/qilin/";
+                    String add;
+                    String add1;
+                    add = baseUrl + user + "/" + pass + "/" + "one";
+                    add1 = baseUrl + user + "/" + pass + "/" + "all";
                     Log.e("add", add);
                     URL url = new URL(add);
+                    URL url1 = new URL(add1);
+                    Log.e("add1", add1);
                     connection = (HttpURLConnection) url.openConnection();
                     connection.setRequestMethod("GET");
-                    connection.setConnectTimeout(8000);
-                    connection.setReadTimeout(8000);
+                    connection.setConnectTimeout(20000);
+                    connection.setReadTimeout(20000);
                     InputStream in = connection.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in));
                     StringBuilder res = new StringBuilder();
@@ -41,8 +48,20 @@ public class CommonUtils {
                     while ((line = reader.readLine()) != null) {
                         res.append(line);
                     }
+                    connection1 = (HttpURLConnection) url1.openConnection();
+                    connection1.setRequestMethod("GET");
+                    connection1.setConnectTimeout(8000);
+                    connection1.setReadTimeout(8000);
+                    InputStream in1 = connection1.getInputStream();
+                    BufferedReader reader1 = new BufferedReader(new InputStreamReader(in1));
+                    StringBuilder res1 = new StringBuilder();
+                    String line1;
+                    while ((line1 = reader1.readLine()) != null) {
+                        res1.append(line1);
+                    }
+
                     if (listener != null) {
-                        listener.onFinish(res.toString());
+                        listener.onFinish(res.toString(), res1.toString());
                     }
                 } catch (Exception e) {
                     if (e instanceof java.net.SocketTimeoutException) {
@@ -65,6 +84,30 @@ public class CommonUtils {
         }).start();
     }
 
+    public static void sendUpdateRequest(final HttpCallBackUpdateListener listener) {
+        HttpURLConnection connection ;
+        try {
+            URL url = new URL("http://www.qilinlirui.com/version.xml");
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setConnectTimeout(20000);
+            connection.setReadTimeout(20000);
+            InputStream in = connection.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            StringBuilder res = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                res.append(line);
+            }
+            Log.e("contentofup", res.toString());
+            if (listener != null) {
+                listener.onFinish(res.toString());
+            }
+        } catch (Exception e) {
+            listener.onError(e);
+        }
+    }
+
     public static String convert(String utfString) {
         StringBuilder sb = new StringBuilder();
         int i;
@@ -78,25 +121,25 @@ public class CommonUtils {
         }
         return sb.toString();
     }
-    public static void saveUserAndPass(String user,String pass)
-    {
-        SharedPreferences.Editor editor =  MyApplication.getContext().getSharedPreferences("secret", Context.MODE_PRIVATE).edit();
-        editor.putString("username",user);
-        editor.putString("password",pass);
+
+    public static void saveUserAndPass(String user, String pass) {
+        SharedPreferences.Editor editor = MyApplication.getContext().getSharedPreferences("secret", Context.MODE_PRIVATE).edit();
+        editor.putString("username", user);
+        editor.putString("password", pass);
         editor.commit();
     }
-    public static String getUserName()
-    {
+
+    public static String getUserName() {
         String name;
-        SharedPreferences preferences = MyApplication.getContext().getSharedPreferences("secret",Context.MODE_PRIVATE);
-        name = preferences.getString("username","");
+        SharedPreferences preferences = MyApplication.getContext().getSharedPreferences("secret", Context.MODE_PRIVATE);
+        name = preferences.getString("username", "");
         return name;
     }
-    public static String getPassword()
-    {
-        String pass ;
+
+    public static String getPassword() {
+        String pass;
         SharedPreferences preferences = MyApplication.getContext().getSharedPreferences("secret", Context.MODE_PRIVATE);
-        pass = preferences.getString("password","");
+        pass = preferences.getString("password", "");
         return pass;
     }
 

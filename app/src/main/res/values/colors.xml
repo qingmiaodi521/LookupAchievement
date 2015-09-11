@@ -16,4 +16,18 @@
     <color name="list_background_normal">#FCFCFC</color>
     <!-- secondary colors for drawer -->
     <color name="list_background_secondary_normal">#F2F2F2</color>
+
+    <color name="red">#bf360c</color>
+    <color name="ripple_red">#ffbf5232</color>
+
+    <color name="material_teal">@color/material_deep_teal_500</color>
+    <color name="ripple_material_teal">#ff149691</color>
+
+    <color name="blue">#304f9f</color>
+    <color name="grey">@color/material_blue_grey_800</color>
+    <color name="light">@color/primary_material_light</color>
+
+    <color name="windowBackgroundColor">#333333</color>
+    <color name="black_translucent">#80000000</color>
+
 </resources>

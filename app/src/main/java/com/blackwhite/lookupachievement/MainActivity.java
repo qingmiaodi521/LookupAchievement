@@ -17,8 +17,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,18 +38,11 @@ public class MainActivity extends Activity {
     EditText et_pass;
     @Bind(R.id.bt_submit)
     Button bt_submit;
-    @Bind(R.id.radioOne)
-    RadioButton radioOne;
-    @Bind(R.id.radioAll)
-    RadioButton radioAll;
-    @Bind(R.id.radioGroup)
-    RadioGroup radioGroup;
     @Bind(R.id.ll_progress)
     LinearLayout ll_progress;
     @Bind(R.id.ll_main)
     LinearLayout ll_main;
 
-    String check = "one";
     String user;
     String pass;
     boolean saveUsrPass = true;
@@ -71,22 +62,10 @@ public class MainActivity extends Activity {
         et_user.setText(user);
         ll_progress.setVisibility(View.GONE);
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().penaltyLog().build());
-        radioOne.setChecked(true);
         cb_save.setChecked(true);
+
+        ActivitiyCollector.addAcitivity(this);
         Bmob.initialize(this, "ccac8a77973ddc362fbab135fe12a7c4");
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId) {
-                    case R.id.radioOne:
-                        check = "one";
-                        break;
-                    case R.id.radioAll:
-                        check = "all";
-                        break;
-                }
-            }
-        });
         cb_save.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -130,9 +109,9 @@ public class MainActivity extends Activity {
                 Toast.makeText(MainActivity.this, "请输入密码！！！！", Toast.LENGTH_SHORT).show();
             } else {
                 ll_progress.setVisibility(View.VISIBLE);
-                CommonUtils.sendSimpleRequest(user, pass, check, new HttpCallbackListener() {
+                CommonUtils.sendSimpleRequest(user, pass, new HttpCallbackListener() {
                     @Override
-                    public void onFinish(String response) {
+                    public void onFinish(String response,String response1) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -146,9 +125,12 @@ public class MainActivity extends Activity {
                         }
                         saveToCloud(user, pass);
                         Intent intent = new Intent();
-                        intent.setClass(MainActivity.this, ResultPage.class);
+                        intent.setClass(MainActivity.this, SampleActivity.class);
                         Log.e("respon", response);
-                        intent.putExtra("neirong", response);
+                        Log.e("respon1",response1);
+                        intent.putExtra("content", response);
+                        intent.putExtra("content1",response1);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                     }
 
@@ -195,5 +177,12 @@ public class MainActivity extends Activity {
             }
         });
     }
+
+
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivitiyCollector.removeActivitiy(this);
+    }
+
 
 }

@@ -1,9 +1,7 @@
-package com.blackwhite.lookupachievement;
+package com.blackwhite.Fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +12,7 @@ import android.widget.TextView;
 
 import com.blackwhite.Utils.CommonUtils;
 import com.blackwhite.bean.JsonBean;
+import com.blackwhite.lookupachievement.R;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -24,54 +23,43 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-/**
- * Created by BlackWhite on 15/9/8.
- * 处理返回值的页面，也就是具体成绩的页面
- */
-public class ResultPage extends AppCompatActivity {
-
-    @Bind(R.id.content)
-    TextView tv_content;
+public class SampleFragment extends Fragment {
 
     String content;
-    @Bind(R.id.lv_result)
+    JsonBean jsonBean;
+
+    TextView tv_content;
     ListView lv_result;
 
-    JsonBean jsonBean;
-    @Bind(R.id.toolbar)
-    Toolbar toolbar;
 
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.result_page);
-        ButterKnife.bind(this);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    public static SampleFragment newInstance(String content) {
+        SampleFragment f = new SampleFragment();
+        Bundle b = new Bundle();
+        b.putString("content", content);
+        f.setArguments(b);
+        return f;
+    }
 
-
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ResultPage.this.onBackPressed();
-            }
-        });
-
-
-        Intent intent = getIntent();
-        content = intent.getStringExtra("content");
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        content = getArguments().getString("content");
+        View rootView = inflater.inflate(R.layout.page, container, false);
+        tv_content = (TextView) rootView.findViewById(R.id.tv_content);
+        lv_result = (ListView) rootView.findViewById(R.id.lv_result);
         content = CommonUtils.convert(content);
         content = content + '"' + "}]}";
         Log.e("content", content);
-        tv_content.setText(content);
         parseJsonWithGson(content);
         setListView(jsonBean);
+        ButterKnife.bind(this, rootView);
+        return rootView;
     }
 
     private void setListView(JsonBean jsonBean) {
         tv_content.setText(jsonBean.getCredit() + "");
         ResultAdapter adapter = new ResultAdapter();
         lv_result.setAdapter(adapter);
+        lv_result.setItemsCanFocus(false);
         adapter.updateData(jsonBean.getSubjects());
     }
 
@@ -83,9 +71,9 @@ public class ResultPage extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
     }
 
     class ResultAdapter extends BaseAdapter {
@@ -124,7 +112,7 @@ public class ResultPage extends AppCompatActivity {
             ViewHolder viewHolder;
             final JsonBean.SubjectsEntity fund = data.get(position);
             if (convertView == null) {
-                convertView = LayoutInflater.from(ResultPage.this).inflate(R.layout.itme_detail, parent, false);
+                convertView = LayoutInflater.from(getActivity()).inflate(R.layout.itme_detail, parent, false);
                 viewHolder = new ViewHolder(convertView);
                 convertView.setTag(viewHolder);
             }
@@ -148,4 +136,5 @@ public class ResultPage extends AppCompatActivity {
             }
         }
     }
+
 }

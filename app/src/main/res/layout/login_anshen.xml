@@ -69,36 +69,13 @@
                 android:numeric="integer"
                 android:password="true"/>
         </RelativeLayout>
-        <CheckBox
+        <android.support.v7.widget.AppCompatCheckBox
             android:id="@+id/cb_save"
-            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="保存密码"
-            />
-        <RadioGroup
-            android:id="@+id/radioGroup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:contentDescription="学年"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/radioOne"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="本学期">
-            </RadioButton>
-
-            <RadioButton
-                android:id="@+id/radioAll"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="所有必修">
-            </RadioButton>
-        </RadioGroup>
+            android:checked="true"/>
         <Button
             android:id="@+id/bt_submit"
             android:layout_width="match_parent"
@@ -136,13 +113,14 @@
         android:layout_marginBottom="40dp"
         android:gravity="center"
         android:orientation="vertical">
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
+        <com.blackwhite.views.ProgressBarCircular
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:textSize="24sp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="正在加载"/>
     </LinearLayout>
+
 </FrameLayout>
