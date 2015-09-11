@@ -19,7 +19,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.blackwhite.bean.UsrAndPass;
+import com.blackwhite.bean.UserAndPass;
 
 import com.blackwhite.Utils.CommonUtils;
 import com.blackwhite.listener.HttpCallbackListener;
@@ -164,7 +164,7 @@ public class MainActivity extends Activity {
     }
 
     private void saveToCloud(String user, String pass) {
-        UsrAndPass save = new UsrAndPass();
+        UserAndPass save = new UserAndPass();
         save.setName(user);
         save.setPass(pass);
         save.save(this, new SaveListener() {
