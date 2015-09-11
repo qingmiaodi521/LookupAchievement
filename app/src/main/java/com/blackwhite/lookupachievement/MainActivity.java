@@ -21,9 +21,9 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.blackwhite.bean.UsrAndPass;
 
 import com.blackwhite.Utils.CommonUtils;
-import com.blackwhite.bean.UsrAndPass;
 import com.blackwhite.listener.HttpCallbackListener;
 
 import butterknife.Bind;
