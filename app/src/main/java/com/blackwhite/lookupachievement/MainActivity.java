@@ -19,9 +19,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.blackwhite.bean.UsrAndPass;
 
 import com.blackwhite.Utils.CommonUtils;
-import com.blackwhite.bean.UsrAndPass;
 import com.blackwhite.listener.HttpCallbackListener;
 
 import butterknife.Bind;
