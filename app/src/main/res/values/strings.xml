@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LookupAchievement</string>
+    <string name="app_name">绩点查查查</string>
     <string name="ic_launch">绩点快查</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>

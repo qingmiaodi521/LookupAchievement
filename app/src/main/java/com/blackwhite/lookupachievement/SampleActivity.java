@@ -112,7 +112,7 @@ public class SampleActivity extends ActionBarActivity {
                     case 4:
                         mDrawerLayout.closeDrawer(Gravity.LEFT);
                         AlertDialog.Builder builder = new AlertDialog.Builder(SampleActivity.this);
-                        builder.setMessage("我承认很丑...无奈设计师和安神私奔了...原谅我吧...");
+                        builder.setMessage("我承认很丑...无奈设计师和安神私奔了...原谅我吧...PS：为什么没有ios版本的呢。。因为...我不会。。");
                         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
