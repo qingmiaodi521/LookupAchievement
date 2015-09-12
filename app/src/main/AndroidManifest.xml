@@ -34,7 +34,7 @@
 
         </activity>
         <activity android:name=".SampleActivity"
-                  android:theme="@style/AppTheme">
+                  android:theme="@style/AppTheme.Base">
         </activity>
     </application>
 
