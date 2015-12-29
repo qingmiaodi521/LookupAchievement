@@ -28,7 +28,7 @@ public class CommonUtils {
                 HttpURLConnection connection1 = null;
                 try {
                     Log.e("connection", "connection");
-                    String baseUrl = "http://115.29.48.92/qilin/getgrade/qilin/";
+                    String baseUrl = "http://innerac.com/qilin/getgrade/qilin/";
                     String add;
                     String add1;
                     add = baseUrl + user + "/" + pass + "/" + "one";
