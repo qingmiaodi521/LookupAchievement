@@ -64,7 +64,7 @@ public class MainActivity extends Activity {
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().penaltyLog().build());
         cb_save.setChecked(true);
 
-        ActivitiyCollector.addAcitivity(this);
+        ActivitiesCollector.addActivity(this);
         Bmob.initialize(this, "ccac8a77973ddc362fbab135fe12a7c4");
         cb_save.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -159,7 +159,6 @@ public class MainActivity extends Activity {
             }
         } else {
             Toast.makeText(MainActivity.this, "当前无网络连接", Toast.LENGTH_SHORT).show();
-
         }
     }
 
@@ -171,17 +170,15 @@ public class MainActivity extends Activity {
             @Override
             public void onSuccess() {
             }
-
             @Override
             public void onFailure(int i, String s) {
             }
         });
     }
 
-
     protected void onDestroy() {
         super.onDestroy();
-        ActivitiyCollector.removeActivitiy(this);
+        ActivitiesCollector.removeActivity(this);
     }
 
 

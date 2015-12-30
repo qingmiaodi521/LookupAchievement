@@ -29,6 +29,7 @@ public class SampleFragment extends Fragment {
     JsonBean jsonBean;
 
     TextView tv_content;
+    TextView tv_scotitle;
     ListView lv_result;
 
 
@@ -43,16 +44,26 @@ public class SampleFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         content = getArguments().getString("content");
-        View rootView = inflater.inflate(R.layout.page, container, false);
-        tv_content = (TextView) rootView.findViewById(R.id.tv_content);
-        lv_result = (ListView) rootView.findViewById(R.id.lv_result);
-        content = CommonUtils.convert(content);
-        content = content + '"' + "}]}";
-        Log.e("content", content);
-        parseJsonWithGson(content);
-        setListView(jsonBean);
-        ButterKnife.bind(this, rootView);
-        return rootView;
+        if (!content.equals("not_open")) {
+            View rootView = inflater.inflate(R.layout.page, container, false);
+            tv_content = (TextView) rootView.findViewById(R.id.tv_content);
+            lv_result = (ListView) rootView.findViewById(R.id.lv_result);
+            content = CommonUtils.convert(content);
+            content = content + '"' + "}]}";
+            Log.e("content", content);
+            parseJsonWithGson(content);
+            setListView(jsonBean);
+            ButterKnife.bind(this, rootView);
+            return rootView;
+        }else{
+            View rootView = inflater.inflate(R.layout.page, container, false);
+            tv_content = (TextView) rootView.findViewById(R.id.tv_content);
+            tv_scotitle = (TextView) rootView.findViewById(R.id.tv_scotitle);
+            tv_scotitle.setText("");
+            tv_content.setText("成绩查询尚未开放，请开放后再尝试!");
+            ButterKnife.bind(this, rootView);
+            return rootView;
+        }
     }
 
     private void setListView(JsonBean jsonBean) {

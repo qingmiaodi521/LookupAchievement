@@ -48,7 +48,7 @@ public class SampleActivity extends AppCompatActivity {
 
         Bmob.initialize(this, "ccac8a77973ddc362fbab135fe12a7c4");
 
-        ActivitiyCollector.addAcitivity(this);
+        ActivitiesCollector.addActivity(this);
 
         String content1 = getIntent().getStringExtra("content");
         String content2 = getIntent().getStringExtra("content1");
@@ -178,7 +178,7 @@ public class SampleActivity extends AppCompatActivity {
                         manager.checkUpdate();
                         break;
                     case 7:
-                        ActivitiyCollector.removeAllAcitivity();
+                        ActivitiesCollector.removeAllActivities();
                         break;
                 }
             }
@@ -188,13 +188,13 @@ public class SampleActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        ActivitiyCollector.removeAllAcitivity();
+        ActivitiesCollector.removeAllActivities();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ActivitiyCollector.removeActivitiy(this);
+        ActivitiesCollector.removeActivity(this);
     }
 
     public void setDefaultColor()

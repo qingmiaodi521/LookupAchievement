@@ -112,6 +112,7 @@ public class UpdateManager {
         // 获取当前软件版本
         int versionCode = getVersionCode(mContext);
 
+        Log.e("todayversion",versionCode+"");
         // 把version.xml放到网络上，然后获取文件信息
        CommonUtils.sendUpdateRequest(new HttpCallBackUpdateListener() {
             @Override

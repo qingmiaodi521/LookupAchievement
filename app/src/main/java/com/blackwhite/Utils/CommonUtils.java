@@ -28,25 +28,31 @@ public class CommonUtils {
                 HttpURLConnection connection1 = null;
                 try {
                     Log.e("connection", "connection");
-                    String baseUrl = "http://115.29.48.92/qilin/getgrade/qilin/";
+                    String baseUrl = "http://innerac.com/qilin/getgrade/qilin/";
                     String add;
                     String add1;
+                    StringBuilder res;
                     add = baseUrl + user + "/" + pass + "/" + "one";
                     add1 = baseUrl + user + "/" + pass + "/" + "all";
                     Log.e("add", add);
                     URL url = new URL(add);
                     URL url1 = new URL(add1);
-                    Log.e("add1", add1);
                     connection = (HttpURLConnection) url.openConnection();
                     connection.setRequestMethod("GET");
                     connection.setConnectTimeout(20000);
                     connection.setReadTimeout(20000);
-                    InputStream in = connection.getInputStream();
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-                    StringBuilder res = new StringBuilder();
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        res.append(line);
+                    connection.connect();
+                    if (connection.getResponseCode()==500){
+                        res = new StringBuilder();
+                        res.append("not_open");
+                    }else {
+                        InputStream in = connection.getInputStream();
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                        res = new StringBuilder();
+                        String line;
+                        while ((line = reader.readLine()) != null) {
+                            res.append(line);
+                        }
                     }
                     connection1 = (HttpURLConnection) url1.openConnection();
                     connection1.setRequestMethod("GET");
@@ -59,7 +65,9 @@ public class CommonUtils {
                     while ((line1 = reader1.readLine()) != null) {
                         res1.append(line1);
                     }
-
+                    if (res.toString().equals("{}")&&listener!=null){
+                        listener.onError(0);
+                    }else
                     if (listener != null) {
                         listener.onFinish(res.toString(), res1.toString());
                     }
