@@ -1,5 +1,5 @@
 
-package com.blackwhite.lookupachievement;
+package com.blackwhite.activities;
 
 import android.content.Context;
 import android.graphics.Color;

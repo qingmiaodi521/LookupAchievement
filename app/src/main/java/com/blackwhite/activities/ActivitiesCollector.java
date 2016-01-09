@@ -1,4 +1,4 @@
-package com.blackwhite.lookupachievement;
+package com.blackwhite.activities;
 
 import android.app.Activity;
 
@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  * Created by BlackWhite on 15/9/11.
+ * 类管理工具类
  */
 public class ActivitiesCollector {
     public static List<Activity> activities = new ArrayList<>();

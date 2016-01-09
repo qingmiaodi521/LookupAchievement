@@ -4,6 +4,7 @@ import cn.bmob.v3.BmobObject;
 
 /**
  * Created by BlackWhite on 15/9/11.
+ * give some suggest to the author
  */
 public class Suggest extends BmobObject{
 

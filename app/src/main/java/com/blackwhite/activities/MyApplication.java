@@ -1,4 +1,4 @@
-package com.blackwhite.lookupachievement;
+package com.blackwhite.activities;
 
 import android.app.Application;
 import android.content.Context;

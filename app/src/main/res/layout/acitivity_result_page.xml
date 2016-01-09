@@ -15,11 +15,11 @@
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimaryDark" />
 
-<com.blackwhite.lookupachievement.SlidingTabLayout
+<com.blackwhite.activities.SlidingTabLayout
             android:id="@+id/sliding_tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/colorPrimaryDark"
+            android:background="?attr/colorPrimary"
             android:paddingLeft="20dp"
             android:paddingRight="20dp" />
 
@@ -33,6 +33,7 @@
 
     <ListView
         android:id="@+id/navdrawer"
+        android:alpha="0.8"
         android:layout_width="@dimen/navdrawer_width"
         android:layout_height="match_parent"
         android:layout_gravity="start"

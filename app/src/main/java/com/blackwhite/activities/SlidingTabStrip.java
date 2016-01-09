@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.blackwhite.lookupachievement;
+package com.blackwhite.activities;
 
 import android.R;
 import android.content.Context;
